@@ -1,6 +1,7 @@
-name: Lint Puppet & YAML
+---
+name: Puppet & YAML Validation
 
-on:
+'on':
   push:
     paths:
       - '**.pp'
@@ -20,16 +21,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1
+      - name: Install Puppet
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget gnupg
+          wget https://apt.puppet.com/puppet7-release-focal.deb
+          sudo dpkg -i puppet7-release-focal.deb
+          sudo apt-get update
+          sudo apt-get install -y puppet-agent
+          echo "/opt/puppetlabs/bin" >> $GITHUB_PATH
 
-      - name: Install puppet-lint
-        run: gem install puppet-lint
-
-      - name: Run puppet-lint
-        run: puppet-lint --fail-on-warnings $(find . -type f -name "*.pp")
+      - name: Validate Puppet Manifests
+        run: |
+          find . -type f -name "*.pp" \
+            -exec /opt/puppetlabs/bin/puppet parser validate {} +
 
       - name: Install yamllint
         run: sudo apt-get install -y yamllint

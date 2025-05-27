@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "🔍 Running puppet-lint..."
+if ! puppet-lint --fail-on-warnings $(find . -type f -name "*.pp"); then
+  echo "❌ puppet-lint failed. Commit aborted."
+  exit 1
+fi
+
+echo "🔍 Running yamllint..."
+if ! yamllint .; then
+  echo "❌ yamllint failed. Commit aborted."
+  exit 1
+fi
+
+echo "✅ All lint checks passed."

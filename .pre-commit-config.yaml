@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: puppet-validate
+        name: Puppet parser validate
+        entry: bash -c 'find . -name "*.pp" -exec puppet parser validate {} +'
+        language: system
+        types: [file]
+        files: \.pp$
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.27.1
+    hooks:
+      - id: yamllint
