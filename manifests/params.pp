@@ -1,3 +1,4 @@
+
 # @summary This class manages zabbix server parameters
 class zabbix::params {
   # It seems that ubuntu has an different fping path...
