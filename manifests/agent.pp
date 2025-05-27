@@ -1,3 +1,4 @@
+
 # @summary This will install and configure the zabbix-agent deamon
 # @param zabbix_version This is the zabbix version.
 # @param zabbix_package_state The state of the package that needs to be installed: present or latest.
