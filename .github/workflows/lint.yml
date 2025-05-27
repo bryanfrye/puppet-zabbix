@@ -1,0 +1,38 @@
+name: Lint Puppet & YAML
+
+on:
+  push:
+    paths:
+      - '**.pp'
+      - '**.yaml'
+      - '**.yml'
+  pull_request:
+    paths:
+      - '**.pp'
+      - '**.yaml'
+      - '**.yml'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+
+      - name: Install puppet-lint
+        run: gem install puppet-lint
+
+      - name: Run puppet-lint
+        run: puppet-lint --fail-on-warnings $(find . -type f -name "*.pp")
+
+      - name: Install yamllint
+        run: sudo apt-get install -y yamllint
+
+      - name: Run yamllint
+        run: yamllint .
